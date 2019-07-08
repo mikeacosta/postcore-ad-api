@@ -25,6 +25,12 @@ namespace Postcore.AdApi.Services
             return _mapper.Map<List<AdDto>>(ads);
         }
 
+        public async Task<AdDto> Get(string id)
+        {
+            var ad = await _repo.Get(id);
+            return _mapper.Map<AdDto>(ad);
+        }
+
         public async Task<string> Add(AdDto dto)
         {
             var dbModel = _mapper.Map<AdData>(dto);

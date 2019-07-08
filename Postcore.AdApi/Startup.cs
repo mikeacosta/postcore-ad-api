@@ -3,6 +3,7 @@ using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.Extensions.NETCore.Setup;
 using Amazon.S3;
+using Amazon.SimpleNotificationService;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,6 +38,7 @@ namespace Postcore.AdApi
 
             services.AddAWSService<IAmazonS3>();
             services.AddAWSService<IAmazonDynamoDB>();
+            services.AddAWSService<IAmazonSimpleNotificationService>();
             services.AddDefaultAWSOptions(new AWSOptions
             {
                 Region = RegionEndpoint.GetBySystemName("us-west-2")

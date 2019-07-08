@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.1.1" />
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.3.101.27" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.3.101.32" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.4" />
     <PackageReference Include="AWSSDK.S3" Version="3.3.102.17" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.6" />

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Amazon.SimpleNotificationService;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Postcore.AdApi.Services;
+using Postcore.AdApi.Shared.Messages;
 using Postcore.AdApi.Shared.Models;
 
 namespace Postcore.AdApi.Controllers
@@ -12,10 +16,14 @@ namespace Postcore.AdApi.Controllers
     public class AdController : ControllerBase
     {
         private readonly IAdService _service;
+        private readonly IConfiguration _configuration;
+        private readonly IAmazonSimpleNotificationService _sns;
 
-        public AdController(IAdService service)
+        public AdController(IAdService service, IConfiguration configuration, IAmazonSimpleNotificationService sns)
         {
             _service = service;
+            _configuration = configuration;
+            _sns = sns;
         }
 
         [HttpGet]
@@ -58,6 +66,9 @@ namespace Postcore.AdApi.Controllers
             try
             {
                 await _service.Confirm(dto);
+
+                if (dto.Status == AdStatus.Active)
+                    await SendAdConfirmMessage(dto);
             }
             catch (KeyNotFoundException)
             {
@@ -69,6 +80,15 @@ namespace Postcore.AdApi.Controllers
             }
 
             return new OkResult();
+        }
+
+        private async Task SendAdConfirmMessage(ConfirmAdDto dto)
+        {
+            var topicArn = _configuration.GetValue<string>("TopicArn");
+            var ad = await _service.Get(dto.Id);
+            var message = new ConfirmAdMessage { Id = dto.Id, Title = ad.Title };
+            var msgJson = JsonConvert.SerializeObject(message);
+            await _sns.PublishAsync(topicArn, msgJson);
         }
     }
 }
