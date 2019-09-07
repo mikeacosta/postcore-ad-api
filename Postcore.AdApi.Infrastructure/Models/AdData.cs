@@ -20,6 +20,6 @@ namespace Postcore.AdApi.Infrastructure.Models
 
         [DynamoDBProperty] public string FilePath { get; set; }
 
-        [DynamoDBProperty] public string UserName { get; set; }
+        [DynamoDBProperty] public string Username { get; set; }
     }
 }

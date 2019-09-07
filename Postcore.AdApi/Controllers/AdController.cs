@@ -86,7 +86,13 @@ namespace Postcore.AdApi.Controllers
         {
             var topicArn = _configuration.GetValue<string>("TopicArn");
             var ad = await _service.Get(dto.Id);
-            var message = new ConfirmAdMessage { Id = dto.Id, Title = ad.Title };
+            var message = new ConfirmAdMessage
+            {
+                Id = dto.Id,
+                Title = ad.Title,
+                Description = ad.Description,
+                Username = ad.Username
+            };
             var msgJson = JsonConvert.SerializeObject(message);
             await _sns.PublishAsync(topicArn, msgJson);
         }
